@@ -22,7 +22,11 @@ jobs:
         run: chmod +x ./gradlew
       - name: Check OS FS
         if: ${{ contains(matrix.os, 'windows') }}
-        run: dir
+        run: |
+          dir
+          pwd
+          ls -a -l
+          echo "WTF!!!"
       - name: Compile
         run: ./gradlew compileKotlin
       - name: Kotlin style check
