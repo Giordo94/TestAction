@@ -6,8 +6,8 @@ jobs:
     name: Build
     strategy:
       matrix:
-        os: [windows-latest, ubuntu-20.04, ubuntu-latest, ubuntu-16.04, macos-latest]
-        java: [ 1.8, 11, 12, 13, 14, 15 ]
+        os: [windows-latest, ubuntu-latest, macos-latest]
+        java: [ 12, 15 ]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
@@ -20,6 +20,9 @@ jobs:
           java-version: ${{ matrix.java }}
       - name: Chmode gradlew
         run: chmod +x ./gradlew
+      - name: Check OS FS
+        if: ${{ contains(matrix.os, 'windows') }}
+        run: pwd
       - name: Compile
         run: ./gradlew compileKotlin
       - name: Kotlin style check
