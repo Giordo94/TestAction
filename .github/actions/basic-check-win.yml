@@ -4,10 +4,7 @@ runs:
   using: "composite"
   steps:
     - name: StartAction
-      run: echo 'START ACTION STEPS DOORS'
-      shell: bash
-    - name: Chmode gradlew
-      run: chmod +x ./gradlew
+      run: echo 'START ACTION STEPS WINDOWS'
       shell: bash
     - name: Compile
       run: ./gradlew compileKotlin

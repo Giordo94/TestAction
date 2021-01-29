@@ -10,11 +10,19 @@ jobs:
         java: [ 12, 15 ]
     runs-on: ${{ matrix.os }}
     steps:
-      - name: ActionChecks
-        id: all-check
-        uses: actions/basic-check@v1
+      - name: Checkout
+        uses: actions/checkout@v2
         with:
-          jdk-version: ${{ matrix.java }}
-          os-version: ${{ matrix.os }}
+          fetch-depth: 0
+      - name: Set up JDK 
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java }}
+      - name: ActionChecksLinuxMac
+        if: ${{ ! contains(matrix.os, 'windows') }}
+        uses: ./.github/actions/basic-check
+      - name: ActionChecksWin
+        if: ${{ contains(matrix.os, 'windows') }}
+        uses: ./.github/actions/basic-check-win
       - name: DoneAction
         run: echo 'All steps from action DONE'
