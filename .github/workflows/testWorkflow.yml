@@ -18,9 +18,10 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: ${{ matrix.java }}
+      - name: Chmode gradlew
+        if: ${{ ! contains(matrix.os, 'windows') }}
+        run: chmod +x ./gradlew
       - name: ActionChecks
         uses: ./.github/actions
-        with:
-          os-version: ${{ matrix.os }}
       - name: DoneAction
         run: echo 'All steps from action DONE'
