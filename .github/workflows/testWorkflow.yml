@@ -19,14 +19,15 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
       - name: Chmode gradlew
+        if: ${{ contains(matrix.os, 'ubuntu') }}
         run: chmod +x ./gradlew
-      - name: Check OS FS
-        if: ${{ contains(matrix.os, 'windows') }}
-        run: |
-          dir
-          pwd
-          ls
-          echo "WTF!!!"
+      #- name: Check OS FS
+      #  if: ${{ contains(matrix.os, 'windows') }}
+      #  run: |
+      #    dir
+      #    pwd
+      #    ls
+      #    echo "WTF!!!"
       - name: Compile
         run: ./gradlew compileKotlin
       - name: Kotlin style check
