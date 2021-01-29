@@ -18,6 +18,8 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: ${{ matrix.java }}
+      - name: Check action exists
+        run: ls .github/actions
       - name: ActionChecksLinuxMac
         if: ${{ ! contains(matrix.os, 'windows') }}
         uses: ./.github/actions/basic-check

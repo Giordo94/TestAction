@@ -1,4 +1,4 @@
-name: 'Compile Check Build and Test'
+name: 'basic-check-win'
 description: 'Test actions reusability'
 runs:
   using: "composite"
