@@ -22,9 +22,9 @@ jobs:
         run: ls .github/actions
       - name: ActionChecksLinuxMac
         if: ${{ ! contains(matrix.os, 'windows') }}
-        uses: ./.github/actions/basic-check
+        uses: ./.github/actions/door/basic-check
       - name: ActionChecksWin
         if: ${{ contains(matrix.os, 'windows') }}
-        uses: ./.github/actions/basic-check-win
+        uses: ./.github/actions/win/basic-check-win
       - name: DoneAction
         run: echo 'All steps from action DONE'
