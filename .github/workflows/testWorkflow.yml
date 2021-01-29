@@ -18,13 +18,9 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: ${{ matrix.java }}
-      - name: Check action exists
-        run: ls .github/actions/door
-      - name: ActionChecksLinuxMac
-        if: ${{ ! contains(matrix.os, 'windows') }}
-        uses: ./.github/actions/door
-      - name: ActionChecksWin
-        if: ${{ contains(matrix.os, 'windows') }}
-        uses: ./.github/actions/win
+      - name: ActionChecks
+        uses: ./.github/actions
+        with:
+          os-version: ${{ matrix.os }}
       - name: DoneAction
         run: echo 'All steps from action DONE'

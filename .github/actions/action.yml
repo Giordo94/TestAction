@@ -1,5 +1,10 @@
 name: 'basic-check'
 description: 'Test actions reusability'
+inputs:
+  os-version:  # id of input
+    description: 'OS version'
+    required: true
+    default: 'ubuntu-latest'
 runs:
   using: "composite"
   steps:
@@ -7,6 +12,7 @@ runs:
       run: echo 'START ACTION STEPS DOORS'
       shell: bash
     - name: Chmode gradlew
+      if: ${{ ! contains(inputs.os-version, 'windows') }}
       run: chmod +x ./gradlew
       shell: bash
     - name: Compile
