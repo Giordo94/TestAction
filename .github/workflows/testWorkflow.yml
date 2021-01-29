@@ -10,29 +10,11 @@ jobs:
         java: [ 12, 15 ]
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: ActionChecks
+        id: all-check
+        uses: actions/basic-check@v1
         with:
-          fetch-depth: 0
-      - name: Set up JDK 
-        uses: actions/setup-java@v1
-        with:
-          java-version: ${{ matrix.java }}
-      - name: Chmode gradlew
-        if: ${{ ! contains(matrix.os, 'windows') }}
-        run: chmod +x ./gradlew
-      #- name: Check OS FS
-      #  if: ${{ contains(matrix.os, 'windows') }}
-      #  run: |
-      #    dir
-      #    pwd
-      #    ls
-      #    echo "WTF!!!"
-      - name: Compile
-        run: ./gradlew compileKotlin
-      - name: Kotlin style check
-        run: ./gradlew ktlintCheck
-      - name: Build
-        run: ./gradlew build
-      - name: Test
-        run: ./gradlew test
+          jdk-version: ${{ matrix.java }}
+          os-version: ${{ matrix.os }}
+      - name: DoneAction
+        run: echo 'All steps from action DONE'

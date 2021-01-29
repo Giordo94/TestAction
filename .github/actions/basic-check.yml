@@ -1,0 +1,36 @@
+name: 'Compile Check Build and Test'
+inputs:
+  jdk-version:  # jdk-version of input
+    description: 'JDK version'
+    required: true
+    default: 1.8
+  os-version:   # os-version of input
+    description: 'OS version'
+    required: true
+    default: 'ubuntu-latest'
+runs:
+  using: "composite"
+  steps:
+    - name: StartAction
+      run: echo 'START ACTION STEPS'
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Set up JDK 
+      uses: actions/setup-java@v1
+      with:
+        java-version: ${{ inputs.jdk-version }}
+    - name: Chmode gradlew
+      if: ${{ ! contains(inputs.os-version, 'windows') }}
+      run: chmod +x ./gradlew
+    - name: AfterChmode
+      run: echo 'AFTER CHMODE'
+    - name: Compile
+      run: ./gradlew compileKotlin
+    - name: Kotlin style check
+      run: ./gradlew ktlintCheck
+    - name: Build
+      run: ./gradlew build
+    - name: Test
+      run: ./gradlew test
