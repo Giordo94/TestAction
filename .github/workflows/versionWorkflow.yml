@@ -20,6 +20,10 @@ jobs:
       - name: Chmode gradlew
         if: ${{ ! contains(matrix.os, 'windows') }}
         run: chmod +x ./gradlew
+      - name: Manual tag
+        run: |
+          git describe || echo "0.1.0-$(git log -n1 --date=format:'%Y-%m-%dT%H%M%S' --format=%cd)"
+          git describe --abbrev=0 || echo "0.1.0-$(git log -n1 --date=format:'%Y-%m-%dT%H%M%S' --format=%cd)"
       - name: Update version
         run: ./gradlew computeVersion
       - name: Commit and push
