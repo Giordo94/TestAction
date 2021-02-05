@@ -6,6 +6,7 @@ on:
       - 1.*
 jobs:
   VersionUpdate:
+    needs: Build
     name: Version update
     runs-on: ubuntu-latest
     steps:
