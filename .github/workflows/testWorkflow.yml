@@ -25,3 +25,33 @@ jobs:
         uses: ./.github/actions
       - name: DoneAction
         run: echo 'All steps from action DONE'
+  VersionUpdate:
+    needs: Build
+    if: ${{ contains(github.ref, 'refs/tags/') }}
+    name: Version update
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Set up JDK 
+        uses: actions/setup-java@v1
+        with:
+          java-version: 15
+      - name: Chmode gradlew
+        run: chmod +x ./gradlew
+      - name: Manual tag
+        run: |
+          git describe || echo "0.1.0-$(git log -n1 --date=format:'%Y-%m-%dT%H%M%S' --format=%cd)"
+          git describe --abbrev=0 || echo "0.1.0-$(git log -n1 --date=format:'%Y-%m-%dT%H%M%S' --format=%cd)"
+      - name: Update version
+        run: ./gradlew computeVersion
+      - name: Commit and push
+        uses: EndBug/add-and-commit@v7
+        with:
+          author_name: Giordo
+          add: 'README.md'
+          message: 'updated version'
+          branch: main
+          push: true
