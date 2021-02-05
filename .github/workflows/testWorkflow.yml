@@ -11,11 +11,15 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: test1
+        if: ${{ ! contains(matrix.os, 'windows') }}
         run: |
           pwd
           echo "rip"
           ls -a
-          echo "DONE"
+          echo "DONE first ls"
+          cd ..
+          ls -a
+          echo "DONE second ls"
       - name: Checkout
         uses: actions/checkout@v2
         with:
