@@ -2,7 +2,7 @@ name: versionworkflow
 on: 
   push:
     tags:
-      - *
+      - **
 jobs:
   VersionUpdate:
     name: Version update
