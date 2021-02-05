@@ -1,0 +1,30 @@
+name: versionworkflow
+on: 
+  push:
+    tags:
+      - *
+jobs:
+  VersionUpdate:
+    name: Version update
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Set up JDK 
+        uses: actions/setup-java@v1
+        with:
+          java-version: 15
+      - name: Chmode gradlew
+        if: ${{ ! contains(matrix.os, 'windows') }}
+        run: chmod +x ./gradlew
+      - name: Update version
+        run: ./gradlew computeVersion
+      - name: Commit and push
+        uses: EndBug/add-and-commit@v7
+        with:
+          author_name: Giordo
+          add: 'README.md'
+          message: 'updated version'
+          push: true
