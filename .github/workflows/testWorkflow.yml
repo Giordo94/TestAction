@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: test1
         run: |
+          pwd
+          cd TestAction
           git status
           git pull
           git status
