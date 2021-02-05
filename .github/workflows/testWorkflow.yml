@@ -13,11 +13,9 @@ jobs:
       - name: test1
         run: |
           pwd
-          cd TestAction
-          git status
-          git pull
-          git status
-          git log -2
+          echo "rip"
+          ls -a
+          echo "DONE"
       - name: Checkout
         uses: actions/checkout@v2
         with:
