@@ -13,13 +13,11 @@ jobs:
       - name: test1
         if: ${{ ! contains(matrix.os, 'windows') }}
         run: |
-          pwd
-          echo "rip"
-          ls -a
-          echo "DONE first ls"
-          cd ..
-          ls -a
-          echo "DONE second ls"
+          git clone https://github.com/Giordo94/TestAction
+          cd TestAction
+          git status
+          git log -2
+          echo "DONE logging info"
       - name: Checkout
         uses: actions/checkout@v2
         with:
