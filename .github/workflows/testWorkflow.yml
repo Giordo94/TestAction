@@ -26,6 +26,10 @@ jobs:
     name: Version update
     runs-on: ubuntu-latest
     steps:
+      - name: Set up JDK 
+        uses: actions/setup-java@v1
+        with:
+          java-version: 15
       - name: Clone
         run: |
           git clone https://github.com/Giordo94/TestAction
@@ -48,12 +52,9 @@ jobs:
           echo "describe short tag"
           git describe --abbrev=0 || echo "0.1.0-$(git log -n1 --date=format:'%Y-%m-%dT%H%M%S' --format=%cd)"
           echo "DONE describe tag"
-      - name: Set up JDK 
-        uses: actions/setup-java@v1
-        with:
-          java-version: 15
       - name: Chmode gradlew
         run: |
+          cd TestAction || echo "failed to cd"
           ls -l
           echo "DONE ls before chmod"
           chmod +x ./gradlew
