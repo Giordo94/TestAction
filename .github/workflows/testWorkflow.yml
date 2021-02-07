@@ -1,4 +1,6 @@
 name: workflow
+env:
+  branch: develop
 on: 
   push
 jobs:
@@ -15,7 +17,6 @@ jobs:
         with:
           java-version: 15
       - name: Chmode gradlew
-        if: ${{ ! contains(matrix.os, 'windows') }}
         run: chmod +x ./gradlew
       - name: ActionChecks
         uses: ./.github/actions
@@ -33,7 +34,7 @@ jobs:
       - name: Clone
         run: |
           git clone https://github.com/Giordo94/TestAction .
-          git checkout develop
+          git checkout ${{ env.branch }}
           git log -3
           echo "describe full tag"
           git describe || echo "0.1.0-$(git log -n1 --date=format:'%Y-%m-%dT%H%M%S' --format=%cd)"
@@ -50,5 +51,5 @@ jobs:
           author_name: Giordo
           add: 'README.md'
           message: 'updated version'
-          branch: main
+          branch: ${{ env.branch }}
           push: true
