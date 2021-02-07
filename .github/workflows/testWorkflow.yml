@@ -4,11 +4,7 @@ on:
 jobs:
   Build:
     name: Build
-    strategy:
-      matrix:
-        os: [windows-latest, ubuntu-latest]
-        java: [ 15 ]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -17,7 +13,7 @@ jobs:
       - name: Set up JDK 
         uses: actions/setup-java@v1
         with:
-          java-version: ${{ matrix.java }}
+          java-version: 15
       - name: Chmode gradlew
         if: ${{ ! contains(matrix.os, 'windows') }}
         run: chmod +x ./gradlew
@@ -26,7 +22,6 @@ jobs:
       - name: DoneAction
         run: echo 'All steps from action DONE'
   VersionUpdate:
-    needs: Build
     if: ${{ contains(github.ref, 'refs/tags/') }}
     name: Version update
     runs-on: ubuntu-latest
@@ -34,26 +29,34 @@ jobs:
       - name: Clone
         run: |
           git clone https://github.com/Giordo94/TestAction
+          echo "DONE git clone"
+          ls -l
           cd TestAction
+          echo "inside TestAction"
+          ls -l
+          echo "DONE ls inside TestAction"
           git checkout develop
           echo "checkout develop DONE"
           git status
           echo "hopefully nothing to commit"
-          git log -2
+          git log -4
           echo "DONE logging info"
-      - name: Set up JDK 
-        uses: actions/setup-java@v1
-        with:
-          java-version: 15
-      - name: Chmode gradlew
-        run: chmod +x ./gradlew
-      - name: Manual tag
-        run: |
+          ls -l
+          echo "DONE ls after checkout develop"
           echo "describe full tag"
           git describe || echo "0.1.0-$(git log -n1 --date=format:'%Y-%m-%dT%H%M%S' --format=%cd)"
           echo "describe short tag"
           git describe --abbrev=0 || echo "0.1.0-$(git log -n1 --date=format:'%Y-%m-%dT%H%M%S' --format=%cd)"
           echo "DONE describe tag"
+      - name: Set up JDK 
+        uses: actions/setup-java@v1
+        with:
+          java-version: 15
+      - name: Chmode gradlew
+        run: |
+          ls -l
+          echo "DONE ls before chmod"
+          chmod +x ./gradlew
       - name: Update version
         run: ./gradlew computeVersion
       - name: Commit and push
