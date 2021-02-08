@@ -4,4 +4,4 @@
 
 Added develop branch
 
-Version: [0.1.5-dev02+ca1d711]
+Version: [0.3.1]
