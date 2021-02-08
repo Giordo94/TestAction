@@ -1,4 +1,6 @@
 name: workflow
+env:
+  branch: develop
 on: 
   push
 jobs:
@@ -45,4 +47,5 @@ jobs:
           author_name: Giordo
           add: 'README.md'
           message: 'updated version'
+          branch: ${{ env.branch }}
           push: true
