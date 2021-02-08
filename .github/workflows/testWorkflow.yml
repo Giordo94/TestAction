@@ -1,23 +1,13 @@
 name: workflow
+env:
+  branch: develop
 on: 
   push
 jobs:
   Build:
     name: Build
-    strategy:
-      matrix:
-        os: [windows-latest, ubuntu-latest]
-        java: [ 15 ]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
-      - name: test1
-        if: ${{ ! contains(matrix.os, 'windows') }}
-        run: |
-          git clone https://github.com/Giordo94/TestAction
-          cd TestAction
-          git status
-          git log -2
-          echo "DONE logging info"
       - name: Checkout
         uses: actions/checkout@v2
         with:
@@ -25,16 +15,14 @@ jobs:
       - name: Set up JDK 
         uses: actions/setup-java@v1
         with:
-          java-version: ${{ matrix.java }}
+          java-version: 15
       - name: Chmode gradlew
-        if: ${{ ! contains(matrix.os, 'windows') }}
         run: chmod +x ./gradlew
       - name: ActionChecks
         uses: ./.github/actions
       - name: DoneAction
         run: echo 'All steps from action DONE'
   VersionUpdate:
-    needs: Build
     if: ${{ contains(github.ref, 'refs/tags/') }}
     name: Version update
     runs-on: ubuntu-latest
@@ -43,20 +31,14 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: log commit
-        run: |
-          git pull
-          git log -2
       - name: Set up JDK 
         uses: actions/setup-java@v1
         with:
           java-version: 15
+      - name: fetch all tags to fix broken checkout
+        run: git fetch --force --tags
       - name: Chmode gradlew
         run: chmod +x ./gradlew
-      - name: Manual tag
-        run: |
-          git describe || echo "0.1.0-$(git log -n1 --date=format:'%Y-%m-%dT%H%M%S' --format=%cd)"
-          git describe --abbrev=0 || echo "0.1.0-$(git log -n1 --date=format:'%Y-%m-%dT%H%M%S' --format=%cd)"
       - name: Update version
         run: ./gradlew computeVersion
       - name: Commit and push
@@ -65,5 +47,5 @@ jobs:
           author_name: Giordo
           add: 'README.md'
           message: 'updated version'
-          branch: main
+          branch: ${{ env.branch }}
           push: true
