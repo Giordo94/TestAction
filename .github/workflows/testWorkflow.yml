@@ -1,6 +1,4 @@
 name: workflow
-env:
-  branch: develop
 on: 
   push
 jobs:
@@ -27,20 +25,16 @@ jobs:
     name: Version update
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Set up JDK 
         uses: actions/setup-java@v1
         with:
           java-version: 15
-      - name: Clone
-        run: |
-          git clone https://github.com/Giordo94/TestAction .
-          git checkout ${{ env.branch }}
-          git log -3
-          echo "describe full tag"
-          git describe || echo "0.1.0-$(git log -n1 --date=format:'%Y-%m-%dT%H%M%S' --format=%cd)"
-          echo "describe short tag"
-          git describe --abbrev=0 || echo "0.1.0-$(git log -n1 --date=format:'%Y-%m-%dT%H%M%S' --format=%cd)"
-          echo "DONE describe tag"
+      - name: fetch all tags to fix broken checkout
+        run: git fetch --force --tags
       - name: Chmode gradlew
         run: chmod +x ./gradlew
       - name: Update version
@@ -51,5 +45,4 @@ jobs:
           author_name: Giordo
           add: 'README.md'
           message: 'updated version'
-          branch: ${{ env.branch }}
           push: true
