@@ -1,7 +1,5 @@
 # TestAction
 
-![alt text](https://img.shields.io/badge/Version-0.1.2-green)
-
-Added develop branch
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/Giordo94/TestAction/workflow)
 
 Version: [0.3.2]
