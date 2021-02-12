@@ -4,8 +4,8 @@ env:
 on: 
   push
 jobs:
-  Build:
-    name: Build
+  CheckAll:
+    name: CheckAll
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
