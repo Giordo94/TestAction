@@ -41,6 +41,16 @@ jobs:
         run: chmod +x ./gradlew
       - name: Update version
         run: ./gradlew computeVersion
+      - name: Assemble dist
+        run: ./gradlew assembleDist
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          files: |
+            LICENSE
+            ./build/distributions/*.zip
+            ./build/distributions/*.tar
       - name: Commit and push
         uses: EndBug/add-and-commit@v7
         with:

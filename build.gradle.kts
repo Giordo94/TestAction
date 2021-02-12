@@ -1,3 +1,4 @@
+val myMainClass = "it.unibo.testAction.MainClassKt"
 plugins {
     // In order to build a Kotlin project with Gradle:
     kotlin("jvm")
@@ -40,6 +41,22 @@ detekt {
     buildUponDefaultConfig = true
 }
 
+tasks.jar {
+    manifest {
+        attributes(
+            mapOf(
+                "Main-Class" to myMainClass,
+                "Implementation-Version" to archiveVersion
+            )
+        )
+    }
+    from(sourceSets.main.get().output)
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
+}
+
 tasks.withType<Test> {
     useJUnitPlatform() // Use JUnit 5 engine
     testLogging.showStandardStreams = true
@@ -76,5 +93,5 @@ tasks.register("computeVersion") {
 
 application {
     // Define the main class for the application
-    mainClass.set("faustoCoppiLabAutomation.MainClassKt")
+    mainClass.set(myMainClass)
 }
